@@ -12,22 +12,24 @@ async function startServer() {
 }
 
 function StatusMessage(props) {
-  if (props.state === null) {
+  if (props.status.state === null) {
     return "Error (no state)";
   }
-  if (props.state ===  0) {
+  if (props.status.state ===  0) {
     return "Server is starting";
   }
-  if (props.state ===  16) {
-    return "Server is running";
+  if (props.status.state ===  16) {
+    const playerCount = props.status.serverStatus.player_count;
+    if (playerCount === undefined) return "Server is starting";
+    return `Server is running, ${playerCount} players online`;
   };
-  if (props.state ===  32 || props.state === 64) {
+  if (props.status.state ===  32 || props.status.state === 64) {
     return "Server is stopping";
   }
-  if (props.state ===  48) {
+  if (props.status.state ===  48) {
     return "Error (Instance is terminated)";
   }
-  if (props.state === 80) {
+  if (props.status.state === 80) {
     return "Server is stopped";
   }
   console.error("Unknown state:", props.state);
@@ -59,7 +61,7 @@ function Status() {
     return "Error (no state)";
   }
   return <>
-    <StatusMessage state={status.state} />
+    <StatusMessage status={status} />
     <StartServerButton state={status.state} />
   </>;
 }
