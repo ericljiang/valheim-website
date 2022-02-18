@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import Status from './status/Status';
 
-const address = "vh-beta.ericjiang.me";
+const address = "vh.ericjiang.me";
 const password = "yeah1234";
 
 function App() {
