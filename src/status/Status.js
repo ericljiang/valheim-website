@@ -14,26 +14,25 @@ async function startServer() {
 function StatusMessage(props) {
   if (props.status.state === null) {
     return "Error (no state)";
-  }
-  if (props.status.state ===  0) {
+  } else if (props.status.state ===  0) {
     return "Server is starting";
-  }
-  if (props.status.state ===  16) {
+  } else if (props.status.state ===  16) {
+    const lastStatusUpdate = props.status.serverStatus.last_status_update;
     const playerCount = props.status.serverStatus.player_count;
-    if (playerCount === undefined) return "Server is starting";
-    return `Server is running, ${playerCount} players online`;
-  };
-  if (props.status.state ===  32 || props.status.state === 64) {
+    if (lastStatusUpdate === undefined || playerCount === undefined) return "Server is starting";
+    const oneMinuteAgo = new Date(new Date().getTime() - 60 * 1000);
+    if (lastStatusUpdate < oneMinuteAgo.toISOString()) return "Server is starting";
+    return `Server is running, ${props.status.serverStatus.player_count} players online`;
+  } else if (props.status.state ===  32 || props.status.state === 64) {
     return "Server is stopping";
-  }
-  if (props.status.state ===  48) {
+  } else if (props.status.state ===  48) {
     return "Error (Instance is terminated)";
-  }
-  if (props.status.state === 80) {
+  } else if (props.status.state === 80) {
     return "Server is stopped";
+  } else {
+    console.error("Unknown state:", props.state);
+    return "Error (unknown state)";
   }
-  console.error("Unknown state:", props.state);
-  return "Error (unknown state)";
 }
 
 function StartServerButton(props) {
